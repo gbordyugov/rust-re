@@ -1,8 +1,8 @@
 #[derive(Debug)]
-enum State<'a> {
+enum State<'a, 'b, 'c> {
     Match,
-    Char { c: char, next: &'a State<'a> },
-    Split { first: &'a State<'a>, second: &'a State<'a> },
+    Char { c: char, next: &'a State<'a, 'b, 'c> },
+    Split { first: &'b State<'a, 'b, 'c>, second: &'c State<'a, 'b, 'c> },
 }
 
 fn print_state<'a>(s: &'a State) {
