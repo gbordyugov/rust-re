@@ -13,7 +13,7 @@ fn print_state(s: StateP) {
         State::Match => print!("Match"),
         State::Char { c, next } => {
             print!("{}", c);
-            print_state(*next);
+            print_state(next);
         },
         // State::Split { first, second } => {
         //     print_state(*first);
