@@ -3,22 +3,43 @@ use std::rc::Rc;
 #[derive(Debug)]
 enum State {
     Match,
-    Char { c: char, next: StateP },
+    Char { c: char, next: Rc<State> },
+    Split { first: Rc<State>, second: Rc<State> },
 }
 
-type StateP = Rc<State>;
+#[derive(Debug)]
+enum List<T> {
+    Nil,
+    Cons { car: T, cdr: Rc<List<T>> },
+}
 
-fn print_state(s: StateP) {
+/*
+fn tmp (s: Rc<State>) {
     match *s {
         State::Match => print!("Match"),
         State::Char { c, next } => {
             print!("{}", c);
-            print_state(next);
+            print_state(&*next);
         },
-        // State::Split { first, second } => {
-        //     print_state(*first);
-        //     print_state(*second);
-        // },
+        State::Split { first, second } => {
+            print_state(&*first);
+            print_state(&*second);
+        },
+    }
+}
+*/
+
+fn print_state(s: &State) {
+    match s {
+        State::Match => print!("Match"),
+        State::Char { c, next } => {
+            print!("{}", c);
+            print_state(&*next);
+        },
+        State::Split { first, second } => {
+            print_state(&*first);
+            print_state(&*second);
+        },
     }
 }
 
@@ -27,10 +48,7 @@ fn main() {
     let mp = Rc::new(m);
     let c = State::Char { c: 'c', next: Rc::clone(&mp) };
     let cp = Rc::new(c);
-    // let s = State::Split { first: Rc::clone(&mp), second: Rc::clone(&cp) };
-    // let sp = Rc::new(s);
 
-    print_state(mp);
-    print_state(cp);
-    // print_state(*sp);
+    print_state(&mp);
+    print_state(&cp);
 }
